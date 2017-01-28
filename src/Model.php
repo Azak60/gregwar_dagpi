@@ -46,7 +46,16 @@ class Model
             VALUES (?, ?, ?, ?)');
         $this->execute($query, array($title, $author, $synopsis, $image));
 
-        // TODO: Créer $copies exemplaires
+        // Erreur à ce niveau là, je ne trouve pas la solution.
+        $data = getBook_id($title, $author);
+
+        $query = $this->pdo->prepare('INSERT INTO exemplaires (book_id) VALUES (?)');
+
+        for($i = 0; $i < $copies; $i++)
+        {
+          $this->execute($query, array($data['id']));
+        }
+
     }
 
     /**
@@ -60,4 +69,31 @@ class Model
 
         return $query->fetchAll();
     }
+
+    /**
+     * Getting a book
+     */
+     public function getBook_id($title, $author)
+     {
+       $query = $this->pdo->prepare(
+         'SELECT livres.id
+          FROM livres
+          WHERE livres.titre = ?
+          AND livres.auteur = ?');
+
+       $this->execute($query, array($title, $author));
+
+       return $query->fetchOne();
+     }
+
+
+     /**
+      *
+      */
+      public function getNbCopy($idBook)
+      {
+        $query = $this->pdo->prepare('SELECT SUM(*) WHERE id = ?');
+
+        return $this->execute($query);
+      }
 }

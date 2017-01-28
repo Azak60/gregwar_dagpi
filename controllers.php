@@ -12,6 +12,11 @@ $app->match('/books', function() use ($app) {
     ));
 })->bind('books');
 
+// Ajout de la route vers bookDetails
+$app->match('/bookDetails', function() use ($app) {
+    return $app['twig']->render('bookDetails.html.twig');
+})->bind('bookDetails');
+
 $app->match('/admin', function() use ($app) {
     $request = $app['request'];
     $success = false;
