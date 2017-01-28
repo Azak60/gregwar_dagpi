@@ -65,4 +65,3 @@ $app->match('/addBook', function() use ($app) {
 
     return $app['twig']->render('addBook.html.twig');
 })->bind('addBook');
-
