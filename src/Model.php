@@ -86,7 +86,7 @@ class Model
 
 
      /**
-      *
+      * Getting all copies of a book
       */
       public function getCopies($id)
       {
@@ -96,4 +96,18 @@ class Model
 
         return $query->fetchAll();
       }
+
+
+      /**
+       * Getting all copies of a book
+       */
+       public function getCopiesAvailable($id)
+       {
+         $query = $this->pdo->prepare('SELECT exemplaires.* FROM exemplaires WHERE exemplaires.book_id = ?
+           AND exemplaires.book_id NOT IN (SELECT emprunts.* FROM emprunts WHERE emprunts.exemplaire = ?)');
+
+         $this->execute($query, array($id, $id));
+
+         return $query->fetchAll();
+       }
 }
