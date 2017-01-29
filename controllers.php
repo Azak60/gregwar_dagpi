@@ -12,10 +12,6 @@ $app->match('/books', function() use ($app) {
     ));
 })->bind('books');
 
-// Ajout de la route vers bookDetails
-$app->match('/bookDetails', function() use ($app) {
-    return $app['twig']->render('bookDetails.html.twig');
-})->bind('bookDetails');
 
 $app->match('/admin', function() use ($app) {
     $request = $app['request'];
@@ -70,3 +66,13 @@ $app->match('/addBook', function() use ($app) {
 
     return $app['twig']->render('addBook.html.twig');
 })->bind('addBook');
+
+
+// Book details
+$app->match('/bookDetails/{id}', function($id) use ($app) {
+
+    return $app['twig']->render('bookDetails.html.twig', [
+        'book' => $app['model']->getBook($id),
+        'copies' => $app['model']->getCopies($id)
+    ]);
+})->bind('bookDetails');
